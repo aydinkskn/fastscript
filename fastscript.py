@@ -4,6 +4,7 @@ import sys
 import time
 import webbrowser
 import getpass
+import subprocess
 
 def print_banner():
     print("""
@@ -26,12 +27,10 @@ def account():
         if hesap=="4":
             break
         elif hesap=="3":
-            liste=[]
-            os.system("net user > user.txt")
-            with open("user.txt","r") as dosya:
-                a=dosya.read()
-                print(a)
-            os.system("del user.txt")
+            kullanicilar = subprocess.Popen(["net","user"])
+            output,error = kullanicilar.communicate()
+            print(output)
+
         elif hesap=="1":
             hesap_isim=input("Hesap adı :")
             hesap_grup=input("Standart User (U) veya Administrator (A)")
@@ -133,11 +132,10 @@ def account():
             else:
                 print("[!]Administrator veya Users grubuna ekleyiniz...")
         elif hesap=="2":
-            os.system("net user > user.txt")
-            with open("user.txt","r") as dosya:
-                a=dosya.read()
-                print(a)
-            os.system("del user.txt")
+            kullanicilar = subprocess.Popen(["net","user"])
+            output,error = kullanicilar.communicate()
+            print(output)
+            
             hesap_isim2=input("Silinecek hesap :")
             liste=[]
             komut="net user /delete "
