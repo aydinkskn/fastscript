@@ -1,21 +1,24 @@
+#coding: utf-8
 import os
 import sys
 import time
 import webbrowser
 import getpass
+import subprocess
 
-print("""
-    ______           __  _____           _       __ 
-   / ____/___ ______/ /_/ ___/__________(_)___  / /_
-  / /_  / __ `/ ___/ __/\__ \/ ___/ ___/ / __ \/ __/
- / __/ / /_/ (__  ) /_ ___/ / /__/ /  / / /_/ / /_  
-/_/    \__,_/____/\__//____/\___/_/  /_/ .___/\__/  
-                                      /_/
+def print_banner():
+    print("""
+        ______           __  _____           _       __ 
+       / ____/___ ______/ /_/ ___/__________(_)___  / /_
+      / /_  / __ `/ ___/ __/\__ \/ ___/ ___/ / __ \/ __/
+     / __/ / /_/ (__  ) /_ ___/ / /__/ /  / / /_/ / /_  
+    /_/    \__,_/____/\__//____/\___/_/  /_/ .___/\__/  
+                                          /_/
 
-                                      Aydin Keskin
-""")
+                                          Aydin Keskin
+    """)
 
-print("\nHoşgeldiniz")
+    print("\nHoşgeldiniz")
 
 def account():
     while True:
@@ -24,12 +27,10 @@ def account():
         if hesap=="4":
             break
         elif hesap=="3":
-            liste=[]
-            os.system("net user > user.txt")
-            with open("user.txt","r") as dosya:
-                a=dosya.read()
-                print(a)
-            os.system("del user.txt")
+            kullanicilar = subprocess.Popen(["net","user"])
+            output,error = kullanicilar.communicate()
+            print(output)
+
         elif hesap=="1":
             hesap_isim=input("Hesap adı :")
             hesap_grup=input("Standart User (U) veya Administrator (A)")
@@ -131,11 +132,10 @@ def account():
             else:
                 print("[!]Administrator veya Users grubuna ekleyiniz...")
         elif hesap=="2":
-            os.system("net user > user.txt")
-            with open("user.txt","r") as dosya:
-                a=dosya.read()
-                print(a)
-            os.system("del user.txt")
+            kullanicilar = subprocess.Popen(["net","user"])
+            output,error = kullanicilar.communicate()
+            print(output)
+            
             hesap_isim2=input("Silinecek hesap :")
             liste=[]
             komut="net user /delete "
@@ -163,38 +163,43 @@ def tw_update():
     time.sleep(1.5)
     os.system(r'reg add "HKLM\SOFTWARE\TeamViewer" /v UpdateChannel /t reg_dword /d 0')
 
-while True:
-    print("""\n\n
-    1-)Kullanıcı Hesaplarını Ayarla
-    2-)Windows Auto-Update Disable
-    3-)Adobe Flash Updater Disable
-    4-)Team Viewer 12 İndir (doğrudan link)
-    5-)Team Viewer 12 İndir (indirme sayfası)
-    6-)Team Viewer Auto-Update Disable
-    7-)Çıkış
 
-    """)
+def main():
+    print_banner()
+
+    while True:
+        print("""\n\n
+        1-)Kullanıcı Hesaplarını Ayarla
+        2-)Windows Auto-Update Disable
+        3-)Adobe Flash Updater Disable
+        4-)Team Viewer 12 İndir (doğrudan link)
+        5-)Team Viewer 12 İndir (indirme sayfası)
+        6-)Team Viewer Auto-Update Disable
+        7-)Çıkış
+
+        """)
 
 
-    secim=input("Seçim yapınız :")
+        secim=input("Seçim yapınız :")
 
-    if secim=="1":
-        account()
-    elif secim=="2":
-        win_update()
-    elif secim=="3":
-        adobe_update()
-    elif secim=="4":
-        webbrowser.open_new_tab("https://dl.tvcdn.de/download/version_12x/TeamViewer_Setup.exe")
-    elif secim=="5":
-        webbrowser.open_new_tab("https://www.teamviewer.com/tr/download/previous-versions/")
-    elif secim=="6":
-        tw_update()
-    elif secim=="7":
-        print("Programı kullandığınız için teşekkürler")
-        time.sleep(2)
-        sys.exit()
-    else:
-        print("Doğru seçim yapınız...")
+        if secim=="1":
+            account()
+        elif secim=="2":
+            win_update()
+        elif secim=="3":
+            adobe_update()
+        elif secim=="4":
+            webbrowser.open_new_tab("https://dl.tvcdn.de/download/version_12x/TeamViewer_Setup.exe")
+        elif secim=="5":
+            webbrowser.open_new_tab("https://www.teamviewer.com/tr/download/previous-versions/")
+        elif secim=="6":
+            tw_update()
+        elif secim=="7":
+            print("Programı kullandığınız için teşekkürler")
+            time.sleep(2)
+            sys.exit()
+        else:
+            print("Doğru seçim yapınız...")
 
-        
+if __name__ == "__main__":
+    main()
